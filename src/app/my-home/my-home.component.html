@@ -1,0 +1,15 @@
+<ng-container *ngIf="admin; else customer">
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action text-center">Gestione utenti</a>
+    <a href="#" class="list-group-item list-group-item-action text-center">Gestione auto</a>
+    <a href="#" class="list-group-item list-group-item-action text-center">Approva prenotazioni</a>
+    <a href="#" class="list-group-item list-group-item-action text-center">Cancella prenotazioni</a>
+  </div>
+</ng-container>
+
+<ng-template #customer>
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action text-center">Visualizza profilo</a>
+    <a href="#" class="list-group-item list-group-item-action text-center">Prenota auto</a>
+  </div>
+</ng-template>
