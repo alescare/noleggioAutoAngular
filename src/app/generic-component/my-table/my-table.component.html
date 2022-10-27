@@ -34,7 +34,7 @@
       </mat-icon>
     </th>
     <tr
-      *ngFor="let item of ([filterColumn, filter, currentPage, myConfig.pagination.itemPerPage, myConfig.order.defaultColumn, myConfig.order.orderType] | filterSearch:data | pagination:currentPage:myConfig.pagination.itemPerPage | order:myConfig.order.defaultColumn:myConfig.order.orderType)">
+      *ngFor="let item of ([filterColumn, filter, myConfig.order.defaultColumn, myConfig.order.orderType, currentPage, myConfig.pagination.itemPerPage] | filterSearch:data  | order:myConfig.order.defaultColumn:myConfig.order.orderType| pagination:currentPage:myConfig.pagination.itemPerPage | order:myConfig.order.defaultColumn:myConfig.order.orderType)[0]">
       <td *ngFor="let header of myConfig.headers">{{item[header.key]}}</td>
       <td>
         <app-my-button *ngFor="let buttonConfig of buttonOnRow" [myConfig]="buttonConfig"

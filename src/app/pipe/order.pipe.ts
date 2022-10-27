@@ -7,7 +7,7 @@ export class OrderPipe implements PipeTransform {
 
   transform(value: any[], defaultColumn: string, orderType: string): any[] {
 
-    let data = value[0];
+    let data = value;
 
     data.sort(function (a: { [x: string]: any; }, b: { [x: string]: any; }) {
       let x = a[defaultColumn.toLowerCase()];
