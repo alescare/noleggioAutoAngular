@@ -1,8 +1,0 @@
-<label for="dataInizioPeriodo">Data inizio:</label>
-<input type="date" id="dataInizioPeriodo" [(ngModel)]="dataInizioPeriodo"><br/>
-<label for="dataFinePeriodo">Data inizio:</label>
-<input type="date" id="dataFinePeriodo" [(ngModel)]="dataFinePeriodo">
-
-<ng-container *ngIf="autoDisponibili != null">
-<app-my-table [myConfig]="tableConfig" [data]="autoDisponibili" (clickButton)="clickButton($event)"></app-my-table>
-</ng-container>

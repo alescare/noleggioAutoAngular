@@ -1,0 +1,13 @@
+<div class="container" [hidden]="visible">
+  <header class="d-flex align-items-center justify-content-md-between py-3 mb-4 border-bottom">
+    <a routerLink="/home" class="nav-link px-2 link-dark">
+      <mat-icon >home</mat-icon>
+      Home</a>
+
+    <div class="col-md-3 text-md-end"><strong>Utente: {{username}}</strong></div>
+
+    <div class="col-md-3 text-end">
+      <app-my-button [myConfig]="buttonConfig" (click)="logout()"></app-my-button>
+    </div>
+  </header>
+</div>

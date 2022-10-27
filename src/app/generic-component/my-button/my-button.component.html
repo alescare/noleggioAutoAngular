@@ -1,0 +1,6 @@
+<button type="button" [class]="myConfig.customCssClass" style="margin: 5px">
+  <ng-container *ngIf="myConfig.icon != ''">
+    <mat-icon>{{myConfig.icon}}</mat-icon>
+  </ng-container>
+  {{myConfig.text}}
+</button>

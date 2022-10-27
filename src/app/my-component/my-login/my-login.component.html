@@ -1,0 +1,21 @@
+<main class="form-signin w-100 m-auto">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">Log in</h1>
+
+      <div class="form-floating">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Username" formControlName="username" required>
+        <label for="floatingInput">Username</label>
+      </div>
+      <div class="form-floating" >
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+               formControlName="password">
+        <label for="floatingPassword">Password</label>
+      </div>
+  <div class="d-flex justify-content-xl-center">
+      <app-my-button [myConfig]="buttonConfig" type="submit" (click)="onSubmit()"></app-my-button>
+  </div>
+
+    </form>
+  </main>
+
+

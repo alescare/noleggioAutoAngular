@@ -1,0 +1,46 @@
+<main class="form-signin w-100 m-auto">
+
+  <form [formGroup]="form">
+    <ng-container *ngIf="auto; else nuovaAuto">
+      <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">{{title}}</h1>
+    </ng-container>
+    <ng-template #nuovaAuto>
+      <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">{{title}}</h1>
+    </ng-template>
+    <app-my-button [myConfig]="ripristinaButtonConfig" (click)="onClick(ripristinaButtonConfig.text)"></app-my-button>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingTarga" placeholder="Targa" formControlName="targa"
+             required>
+      <label for="floatingTarga">Targa</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingProduttore" placeholder="Produttore"
+             formControlName="produttore">
+      <label for="floatingProduttore">Produttore</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingModello" placeholder="Modello"
+             formControlName="modello">
+      <label for="floatingModello">Modello</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingAnnoImmatricolazione" placeholder="Anno di immatricolazione"
+             formControlName="annoImmatricolazione">
+      <label for="floatingAnnoImmatricolazione">Anno di immatricolazione</label>
+    </div>
+
+    <div class="d-flex justify-content-xl-center">
+      <app-my-button [myConfig]="salvaButtonConfig" type="submit"
+                     (click)="onClick(salvaButtonConfig.text)"></app-my-button>
+      <app-my-button [myConfig]="annullaButtonConfig" type="submit"
+                     (click)="onClick(annullaButtonConfig.text)"></app-my-button>
+    </div>
+
+  </form>
+
+</main>
+
