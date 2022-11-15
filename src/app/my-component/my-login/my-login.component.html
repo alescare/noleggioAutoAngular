@@ -1,5 +1,5 @@
 <main class="form-signin w-100 m-auto">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm">
       <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">Log in</h1>
 
       <div class="form-floating">
@@ -12,7 +12,7 @@
         <label for="floatingPassword">Password</label>
       </div>
   <div class="d-flex justify-content-xl-center">
-      <app-my-button [myConfig]="buttonConfig" type="submit" (click)="onSubmit()"></app-my-button>
+      <app-my-button [myConfig]="buttonConfig"  (click)="onSubmit()"></app-my-button>
   </div>
 
     </form>

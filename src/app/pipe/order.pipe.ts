@@ -7,11 +7,9 @@ export class OrderPipe implements PipeTransform {
 
   transform(value: any[], defaultColumn: string, orderType: string): any[] {
 
-    let data = value;
-
-    data.sort(function (a: { [x: string]: any; }, b: { [x: string]: any; }) {
-      let x = a[defaultColumn.toLowerCase()];
-      let y = b[defaultColumn.toLowerCase()];
+    return [...value.sort(function (a: { [x: string]: any; }, b: { [x: string]: any; }) {
+      let x = a[defaultColumn];
+      let y = b[defaultColumn];
       if (orderType === 'DESC') {
         if (x < y) {
           return -1;
@@ -28,9 +26,7 @@ export class OrderPipe implements PipeTransform {
         }
       }
       return 0;
-    });
-
-    return data;
+    })];
   }
 
 }

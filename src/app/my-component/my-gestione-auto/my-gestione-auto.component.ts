@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MyTableConfig} from '../../interface/table/MyTableConfig';
 import {AutoService} from '../../service/auto/auto.service';
-import {Auto} from "../../interface/entity/auto";
+import {Auto} from "../../entity/auto";
 import {Router} from "@angular/router";
 
 @Component({
@@ -18,11 +18,11 @@ export class MyGestioneAutoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listaAuto = this.autoService.getAutoList();
+    this.getListaAuto();
     this.tableConfig = {
       headers: [
         {key: 'targa', label: 'Targa'},
-        {key: 'produttore', label: 'Produttore'},
+        {key: 'costruttore', label: 'Produttore'},
         {key: 'modello', label: 'Modello'},
         {key: 'annoImmatricolazione', label: 'Anno di immatricolazione'}
       ],
@@ -37,6 +37,10 @@ export class MyGestioneAutoComponent implements OnInit {
     }
   }
 
+  getListaAuto(): void {
+    this.autoService.getListaAuto().subscribe(listaAuto => this.listaAuto = listaAuto);
+  }
+
   clickButton($event: any): void {
     switch ($event.action) {
       case 'Aggiungi':
@@ -46,11 +50,12 @@ export class MyGestioneAutoComponent implements OnInit {
         this.router.navigateByUrl("/modifica_auto/" + $event.row.id);
         break;
       case 'Elimina':
-        this.autoService.eliminaAuto($event.row);
+        this.autoService.eliminaAuto($event.row).subscribe();
+        this.getListaAuto();
         break;
       default:
-
     }
   }
+
 
 }

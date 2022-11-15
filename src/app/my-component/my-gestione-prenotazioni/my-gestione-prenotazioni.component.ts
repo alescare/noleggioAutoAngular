@@ -2,7 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MyTableConfig} from '../../interface/table/MyTableConfig';
 import {PrenotazioneService} from '../../service/prenotazione/prenotazione.service';
-import {Prenotazione} from "../../interface/entity/prenotazione";
+import {Prenotazione} from "../../entity/prenotazione";
+import {Utente} from "../../entity/utente";
+import {get} from "lodash";
+import * as moment from "moment/moment";
 
 
 @Component({
@@ -12,7 +15,7 @@ import {Prenotazione} from "../../interface/entity/prenotazione";
 })
 export class MyGestionePrenotazioniComponent implements OnInit {
 
-  prenotazioni!: Prenotazione[];
+  listaPrenotazioni!: Prenotazione[];
   tableConfig!: MyTableConfig;
 
 
@@ -21,14 +24,15 @@ export class MyGestionePrenotazioniComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     const route = this.route.toString();
 
     this.tableConfig = {
       headers: [
-        {key: 'auto', label: 'Auto'},
-        {key: 'utente', label: 'Utente'},
-        {key: 'dataInizio', label: 'Data inizio'},
-        {key: 'dataFine', label: 'Data fine'}
+        {key: 'infoAuto', label: 'Auto'},
+        {key: 'utente.username', label: 'Utente'},
+        {key: 'dataInizioFormat', label: 'Data inizio'},
+        {key: 'dataFineFormat', label: 'Data fine'}
       ],
       order: {defaultColumn: 'Data Inizio', orderType: ''},
       search: {columns: ['Auto', 'Utente']},
@@ -37,29 +41,45 @@ export class MyGestionePrenotazioniComponent implements OnInit {
     };
 
     if (route.includes('approva')) {
-      this.prenotazioneService.getPrenotazioniDaApprovare();
+      this.getListaPrenotazioniDaApprovare();
       this.tableConfig.actions = [
         {customCssClass: 'btn btn-primary', icon: 'assignment_turned_in', text: 'Approva', onTop: false}
       ]
     } else {
-      this.prenotazioneService.getPrenotazioni();
+      this.getListaPrenotazioni();
       this.tableConfig.actions = [
         {customCssClass: 'btn btn-primary', icon: 'delete', text: 'Elimina', onTop: false}
       ]
     }
+
   }
 
   clickButton($event: any): void {
-    switch ($event.action){
+    switch ($event.action) {
       case 'Approva':
-        this.prenotazioneService.approvaPrenotazione($event.row);
+        this.prenotazioneService.approvaPrenotazione($event.row).subscribe();
+        this.getListaPrenotazioniDaApprovare();
         break;
       case 'Elimina':
-        this.prenotazioneService.cancellaPrenotazione($event.row);
+        this.prenotazioneService.cancellaPrenotazione($event.row).subscribe();
+        this.getListaPrenotazioni();
         break;
       default:
-        ;
     }
+  }
+
+  getListaPrenotazioni(): void {
+    this.prenotazioneService.getListaPrenotazioni().subscribe(prenotazioni => {
+      this.prenotazioneService.prenotazioniFormat(prenotazioni);
+      this.listaPrenotazioni = prenotazioni
+    });
+  }
+
+  getListaPrenotazioniDaApprovare(): void {
+    this.prenotazioneService.getPrenotazioniDaApprovare().subscribe(prenotazioni => {
+      this.prenotazioneService.prenotazioniFormat(prenotazioni);
+      this.listaPrenotazioni = prenotazioni
+    });
   }
 
 }

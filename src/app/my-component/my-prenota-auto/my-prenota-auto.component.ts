@@ -3,10 +3,11 @@ import {MyButtonConfig} from '../../interface/button/MyButtonConfig';
 import {MyTableConfig} from '../../interface/table/MyTableConfig';
 import {AutoService} from '../../service/auto/auto.service';
 import {PrenotazioneService} from '../../service/prenotazione/prenotazione.service';
-import {Auto} from "../../interface/entity/auto";
-import {Prenotazione} from "../../interface/entity/prenotazione";
+import {Auto} from "../../entity/auto";
+import {Prenotazione} from "../../entity/prenotazione";
 import {UtenteService} from "../../service/utente/utente.service";
 import {Router} from "@angular/router";
+import {Utente} from "../../entity/utente";
 
 @Component({
   selector: 'app-my-prenota-auto',
@@ -20,11 +21,15 @@ export class MyPrenotaAutoComponent implements OnInit {
   autoDisponibili!: Auto[];
   cercaButton!: MyButtonConfig;
   tableConfig!: MyTableConfig;
+  prenotazioneInCorso!: boolean;
+  utente!: Utente;
 
   constructor(private autoService: AutoService, private utenteService: UtenteService, private prenotazioneService: PrenotazioneService, private router: Router) {
   }
 
   ngOnInit(): void {
+    this.utente = JSON.parse(localStorage.getItem('utenteLoggato') as string);
+    this.prenotazioneInCorsoUtente(this.utente.id);
     this.cercaButton = {
       text: 'Cerca',
       icon: 'search',
@@ -48,19 +53,23 @@ export class MyPrenotaAutoComponent implements OnInit {
 
   clickButton($event: any): void {
 
-    let prenotazione = {
-      auto: $event.row,
-      dataFine: this.dataFinePeriodo,
-      dataInizio: this.dataInizioPeriodo,
-      utente: this.utenteService.getUtenteByUsername(sessionStorage.getItem('utenteLoggato')),
-      approvata: false
-    };
 
-    this.prenotazioneService.creaPrenotazione(prenotazione);
+    let prenotazione = new Prenotazione();
+    prenotazione.auto = $event.row as Auto;
+    prenotazione.utente = this.utente;
+    prenotazione.dataInizio = this.dataInizioPeriodo;
+    prenotazione.dataFine = this.dataFinePeriodo;
+    prenotazione.approvata = false;
+
+    this.prenotazioneService.salvaAggiornaPrenotazione(prenotazione).subscribe();
     this.router.navigateByUrl("/profilo");
   }
 
   cerca(): void {
-    this.autoDisponibili = this.autoService.cercaAutoDisponibiliNelPeriodo(this.dataInizioPeriodo, this.dataFinePeriodo);
+    this.autoService.cercaAutoDisponibiliNelPeriodo(this.dataInizioPeriodo, this.dataFinePeriodo).subscribe(autoDisponibili => this.autoDisponibili = autoDisponibili);
+  }
+
+  prenotazioneInCorsoUtente(id: number): void {
+    this.prenotazioneService.getPrenotazioneInCorsoUtente(id).subscribe(value => this.prenotazioneInCorso = value);
   }
 }

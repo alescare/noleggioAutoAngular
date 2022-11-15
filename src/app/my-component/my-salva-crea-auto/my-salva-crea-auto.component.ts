@@ -3,7 +3,7 @@ import {MyButtonConfig} from "../../interface/button/MyButtonConfig";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder} from "@angular/forms";
 import {AutoService} from "../../service/auto/auto.service";
-import {Auto} from "../../interface/entity/auto";
+import {Auto} from "../../entity/auto";
 
 @Component({
   selector: 'app-my-salva-crea-auto',
@@ -18,32 +18,18 @@ export class MySalvaCreaAutoComponent implements OnInit {
   salvaButtonConfig!: MyButtonConfig;
   ripristinaButtonConfig!: MyButtonConfig;
   annullaButtonConfig!: MyButtonConfig;
+  private idAuto!: number;
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private autoService: AutoService, private router: Router) {
   }
 
   ngOnInit(): void {
-
     const routeParams = this.route.snapshot.paramMap;
-    const autoIdFromRoute = Number(routeParams.get('autoId'));
-    if (autoIdFromRoute) {
-      this.title = 'Modifica dati auto';
-      this.auto = this.autoService.getAutoById(Number(autoIdFromRoute).valueOf());
-      this.form = this.formBuilder.group({
-        targa: this.auto.targa,
-        produttore: this.auto.produttore,
-        modello: this.auto.modello,
-        annoImmatricolazione: this.auto.annoImmatricolazione,
-      });
+    this.idAuto = Number(routeParams.get('autoId'));
+    if (this.idAuto) {
+      this.getAuto(this.idAuto);
     } else {
-      this.title = 'Creazione nuova auto';
-      this.form = this.formBuilder.group({
-        targa: '',
-        produttore: '',
-        modello: '',
-        annoImmatricolazione: undefined,
-      });
-
+      this.initForm();
     }
     this.salvaButtonConfig = {
       text: 'Salva',
@@ -62,23 +48,58 @@ export class MySalvaCreaAutoComponent implements OnInit {
     }
   }
 
+  getAuto(id: number): void {
+    this.autoService.getAutoById(id).subscribe(auto => {
+      this.auto = auto;
+      this.initForm();
+    });
+  }
+
+  initForm() {
+    if (this.idAuto !== 0) {
+      this.title = 'Modifica dati auto';
+    } else {
+      this.title = 'Creazione nuova auto';
+      this.auto = new Auto();
+    }
+    this.initCampiForm(this.idAuto);
+  }
+
+  initCampiForm(id: number): void {
+    if (id !== 0) {
+      this.form = this.formBuilder.group({
+        targa: this.auto.targa,
+        costruttore: this.auto.costruttore,
+        modello: this.auto.modello,
+        annoImmatricolazione: this.auto.annoImmatricolazione,
+        tipologia: this.auto.tipologia
+      });
+    } else {
+      this.auto = new Auto();
+      this.form = this.formBuilder.group({
+        targa: '',
+        costruttore: '',
+        modello: '',
+        annoImmatricolazione: undefined,
+        tipologia: ''
+      });
+    }
+
+  }
+
   onClick(text: string) {
 
     switch (text) {
       case 'Salva':
-        this.autoService.salvaOAggiornAuto(this.auto);
+        this.autoService.salvaOAggiornAuto(this.auto).subscribe();
         this.router.navigateByUrl('/gestione_auto');
         break;
       case 'Annulla':
         this.router.navigateByUrl('/gestione_auto');
         break;
       default:
-        this.ripristinaForm();
+        (this.idAuto)? this.getAuto(this.idAuto) : this.initForm();
     }
-  }
-
-  ripristinaForm(): void {
-    this.ngOnInit();
   }
 
 }

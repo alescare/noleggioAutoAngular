@@ -1,36 +1,37 @@
 <main class="form-signin w-100 m-auto">
 
   <form [formGroup]="form">
-    <ng-container *ngIf="auto; else nuovaAuto">
-      <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">{{title}}</h1>
-    </ng-container>
-    <ng-template #nuovaAuto>
-      <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">{{title}}</h1>
-    </ng-template>
+    <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">{{title}}</h1>
     <app-my-button [myConfig]="ripristinaButtonConfig" (click)="onClick(ripristinaButtonConfig.text)"></app-my-button>
 
     <div class="form-floating">
-      <input type="text" class="form-control" id="floatingTarga" placeholder="Targa" formControlName="targa"
+      <input type="text" class="form-control" id="floatingTarga" placeholder="Targa" formControlName="targa" [(ngModel)]="auto.targa"
              required>
       <label for="floatingTarga">Targa</label>
     </div>
 
     <div class="form-floating">
-      <input type="password" class="form-control" id="floatingProduttore" placeholder="Produttore"
-             formControlName="produttore">
-      <label for="floatingProduttore">Produttore</label>
+      <input type="text" class="form-control" id="floatingCostruttore" placeholder="Costruttore" [(ngModel)]="auto.costruttore"
+             formControlName="costruttore">
+      <label for="floatingCostruttore">Costruttore</label>
     </div>
 
     <div class="form-floating">
-      <input type="text" class="form-control" id="floatingModello" placeholder="Modello"
+      <input type="text" class="form-control" id="floatingModello" placeholder="Modello" [(ngModel)]="auto.modello"
              formControlName="modello">
       <label for="floatingModello">Modello</label>
     </div>
 
     <div class="form-floating">
-      <input type="text" class="form-control" id="floatingAnnoImmatricolazione" placeholder="Anno di immatricolazione"
+      <input type="text" class="form-control" id="floatingAnnoImmatricolazione" placeholder="Anno di immatricolazione" [(ngModel)]="auto.annoImmatricolazione"
              formControlName="annoImmatricolazione">
       <label for="floatingAnnoImmatricolazione">Anno di immatricolazione</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingTipologia" placeholder="Tipologia" [(ngModel)]="auto.tipologia"
+             formControlName="tipologia">
+      <label for="floatingTipologia">Tipologia</label>
     </div>
 
     <div class="d-flex justify-content-xl-center">

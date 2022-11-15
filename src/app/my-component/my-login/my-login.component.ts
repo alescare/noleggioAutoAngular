@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {UtenteService} from '../../service/utente/utente.service';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {MyButtonConfig} from "../../interface/button/MyButtonConfig";
 import {Router} from "@angular/router";
+import {AuthService} from "../../service/jwt/auth.service";
+import {Utente} from "../../entity/utente";
 
 
 @Component({
@@ -13,16 +15,22 @@ import {Router} from "@angular/router";
 export class MyLoginComponent implements OnInit {
 
   buttonConfig!: MyButtonConfig;
-  loginForm = this.formBuilder.group({
-    username: '',
-    password: ''
-  });
+  loginForm: FormGroup;
+
   msg!: string;
 
-  constructor(private utenteService: UtenteService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(private utenteService: UtenteService, private formBuilder: FormBuilder, private router: Router,  private authService: AuthService) {
+    this.loginForm = this.formBuilder.group({
+      username: '',
+      password: '',
+    });
   }
 
   ngOnInit(): void {
+
+    if(localStorage.getItem('access_token')) {//finchè esiste il token, non si può tornare a /login
+      this.router.navigateByUrl("/home");
+    }
     this.buttonConfig = {
       text: 'Accedi',
       customCssClass: 'w-100 btn btn-lg btn-primary',
@@ -31,14 +39,7 @@ export class MyLoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    let username = (this.loginForm.value.username != null && this.loginForm.value.username != undefined) ? this.loginForm.value.username : '';
-    let password = (this.loginForm.value.password != null && this.loginForm.value.password != undefined) ? this.loginForm.value.password : '';
-    let u = this.utenteService.cercaUtentePerCredenziali(username, password);
-    if (u != null) {
-      sessionStorage.setItem('utenteLoggato', username);
-      sessionStorage.setItem('admin', '' + u.admin);
-      this.router.navigateByUrl("/home");
-    }
+    this.authService.signIn(this.loginForm.value);
   }
 
 }

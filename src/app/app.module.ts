@@ -23,6 +23,8 @@ import {MySalvaCreaAutoComponent} from './my-component/my-salva-crea-auto/my-sal
 import {MyGestionePrenotazioniComponent} from './my-component/my-gestione-prenotazioni/my-gestione-prenotazioni.component';
 import {RouterModule, RouterOutlet} from "@angular/router";
 import {CdkTableModule} from "@angular/cdk/table";
+import {HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {AuthInterceptor} from "./service/jwt/auth.interceptor";
 
 
 @NgModule({
@@ -42,10 +44,11 @@ import {CdkTableModule} from "@angular/cdk/table";
     MyProfiloComponent,
     MySalvaCreaUtenteComponent,
     MySalvaCreaAutoComponent,
-    MyGestionePrenotazioniComponent
+    MyGestionePrenotazioniComponent,
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
@@ -67,7 +70,13 @@ import {CdkTableModule} from "@angular/cdk/table";
     ]),
     CdkTableModule
   ],
-  providers: [],
+  providers: [
+    FilterSearchPipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

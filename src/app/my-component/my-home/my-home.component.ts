@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Utente} from "../../entity/utente";
 
 @Component({
   selector: 'app-my-home',
@@ -7,17 +8,13 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class MyHomeComponent implements OnInit {
 
-  admin!: boolean;
+  utente!: Utente;
 
   constructor() {
   }
 
   ngOnInit(): void {
-    if (sessionStorage.getItem('admin') == 'true') {
-      this.admin = true;
-    } else {
-      this.admin = false;
-    }
+    this.utente = JSON.parse(localStorage.getItem('utenteLoggato') as string);
   }
 
 }

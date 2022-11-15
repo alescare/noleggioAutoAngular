@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder} from "@angular/forms";
-import {Utente} from "../../interface/entity/utente";
+import {Utente} from "../../entity/utente";
 import {UtenteService} from "../../service/utente/utente.service";
 import {MyButtonConfig} from "../../interface/button/MyButtonConfig";
+import {AuthService} from "../../service/jwt/auth.service";
 
 @Component({
   selector: 'app-my-salva-crea-utente',
@@ -19,32 +20,13 @@ export class MySalvaCreaUtenteComponent implements OnInit {
   ripristinaButtonConfig!: MyButtonConfig;
   annullaButtonConfig!: MyButtonConfig;
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private utenteService: UtenteService, private router: Router) {
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private utenteService: UtenteService, private router: Router, private authService: AuthService) {
   }
 
   ngOnInit(): void {
 
-    const currentRoute = this.route.snapshot.toString();
-    if (currentRoute.includes('modifica')) {
-      this.title = 'Modifica credenziali';
-      this.utente = this.utenteService.getUtenteByUsername(sessionStorage.getItem('utenteLoggato'));
-      this.form = this.formBuilder.group({
-        username: this.utente.username,
-        password: '',
-        email: this.utente.email
-      });
-    } else {
-      this.title = 'Creazione nuovo utente';
-      this.form = this.formBuilder.group({
-        username: '',
-        password: '',
-        email: '',
-        nome: '',
-        cognome: '',
-        dataNascita: null,
-      });
+    this.initForm();
 
-    }
     this.salvaButtonConfig = {
       text: 'Salva',
       customCssClass: 'w-100 btn btn-lg btn-primary',
@@ -60,17 +42,51 @@ export class MySalvaCreaUtenteComponent implements OnInit {
       customCssClass: 'w-100 btn btn-lg btn-primary',
       icon: ''
     }
+  }
 
 
+  initForm() {
+    const currentRoute = this.route.snapshot.toString();
+    if (currentRoute.includes('modifica')) {
+      this.getUtente();
+      this.title = 'Modifica credenziali';
+    } else {
+      this.utente = new Utente();
+      this.title = 'Creazione nuovo utente';
+    }
+    this.initCampiForm();
+  }
+
+  initCampiForm(): void {
+    if (this.utente.id) {
+      this.form = this.formBuilder.group({
+        username: this.utente.username,
+        password: '',
+        email: this.utente.email
+      });
+    } else {
+      this.utente = new Utente();
+      this.form = this.formBuilder.group({
+        username: '',
+        password: '',
+        email: '',
+        nome: '',
+        cognome: '',
+        dataNascita: null,
+      });
+    }
+  }
+
+  getUtente(): void {
+    this.utente = JSON.parse(localStorage.getItem('utenteLoggato') as string);
   }
 
   onClick(text: string) {
-
     switch (text) {
       case 'Salva':
-        this.utenteService.salvaOAggiornUtente(this.utente);
+        this.utenteService.salvaOAggiornUtente(this.utente).subscribe();
         if (this.utente.id) {
-          this.router.navigateByUrl('/profilo');
+          this.authService.doLogout();
         } else {
           this.router.navigateByUrl('/gestione_utenti');
         }
@@ -83,12 +99,7 @@ export class MySalvaCreaUtenteComponent implements OnInit {
         }
         break;
       default:
-        this.ripristinaForm();
+        this.initCampiForm();
     }
   }
-
-  ripristinaForm(): void {
-    this.ngOnInit();
-  }
-
 }

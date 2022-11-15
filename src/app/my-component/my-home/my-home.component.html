@@ -1,4 +1,4 @@
-<ng-container *ngIf="admin; else customer">
+<ng-container *ngIf="utente?.admin; else customer">
   <div class="list-group">
     <a routerLink="/gestione_utenti" class="list-group-item list-group-item-action text-center">Gestione utenti</a>
     <a routerLink="/gestione_auto" class="list-group-item list-group-item-action text-center">Gestione auto</a>

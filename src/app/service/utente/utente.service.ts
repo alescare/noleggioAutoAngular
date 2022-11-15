@@ -1,61 +1,28 @@
 import {Injectable} from '@angular/core';
-import {Utente} from "../../interface/entity/utente";
+import {Utente} from "../../entity/utente";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtenteService {
+  endpoint: string = 'http://localhost:8080/api/utente';
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
-  cercaUtentePerCredenziali(username: string, password: string): Utente {
-    //invocazione service
-    if (username == 'admin') {
-      return {
-        username: 'admin',
-        admin: true,
-        password: password,
-        dataNascita: new Date('10-10-2000'),
-        cognome: '',
-        id: 1,
-        nome: '',
-        email: '',
-        prenotazioni: []
-      }
-    }
-    return {
-      username: username,
-      admin: false,
-      password: password,
-      dataNascita: new Date('10-10-2000'),
-      cognome: '',
-      id: 1,
-      nome: '',
-      email: '',
-      prenotazioni: []
-    }
-  }
 
-  eliminaUtente(row: any): void {
+  eliminaUtente(utente: Utente): Observable<any> {
+    return this.http.delete(`${this.endpoint}/elimina/${utente.id}`);
 
   }
 
-  getUtenteByUsername(username: string | null): Utente {
-    return {
-      username: 'admin',
-      admin: true,
-      password: '',
-      dataNascita: new Date('10-10-2000'),
-      cognome: '',
-      id: 1,
-      nome: '',
-      email: '',
-      prenotazioni: []
-    }
+  salvaOAggiornUtente(utente: Utente): Observable<any> {
+      return this.http.post<Utente>(`${this.endpoint}/salva_aggiorna_utente`, utente);
   }
 
-  salvaOAggiornUtente(utente: Utente) {
-
+  getListaUtenti(): Observable<Utente[]> {
+    return this.http.get<Utente[]>(`${this.endpoint}/lista_utenti`);
   }
 }

@@ -1,14 +1,20 @@
-<div class="justify-content-xl-center">
-  <div>
-    <label for="dataInizioPeriodo">Data inizio:</label>
-    <input type="date" id="dataInizioPeriodo" [(ngModel)]="dataInizioPeriodo"><br/>
-    <label for="dataFinePeriodo">Data inizio:</label>
-    <input type="date" id="dataFinePeriodo" [(ngModel)]="dataFinePeriodo">
-  </div>
-
-  <app-my-button [myConfig]="cercaButton" (click)="cerca()"></app-my-button>
-</div>
-<ng-container *ngIf="autoDisponibili != undefined">
-  <app-my-table [myConfig]="tableConfig" [data]="autoDisponibili" (clickButton)="clickButton($event)"></app-my-table>
+<ng-container *ngIf="prenotazioneInCorso; else prenota">
+  <h6>HAI GIA' UNA PRENOTAZIONE IN CORSO, <a routerLink="/home">TORNA INDIETRO</a></h6>
 </ng-container>
+<ng-template #prenota>
+
+  <div class="justify-content-xl-center">
+    <div>
+      <label for="dataInizioPeriodo">Data inizio:</label>
+      <input type="date" id="dataInizioPeriodo" [(ngModel)]="dataInizioPeriodo"><br/>
+      <label for="dataFinePeriodo">Data inizio:</label>
+      <input type="date" id="dataFinePeriodo" [(ngModel)]="dataFinePeriodo">
+    </div>
+
+    <app-my-button [myConfig]="cercaButton" (click)="cerca()"></app-my-button>
+  </div>
+  <ng-container *ngIf="autoDisponibili != undefined">
+    <app-my-table [myConfig]="tableConfig" [data]="autoDisponibili" (clickButton)="clickButton($event)"></app-my-table>
+  </ng-container>
+</ng-template>
 

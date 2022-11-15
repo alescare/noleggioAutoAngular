@@ -1,20 +1,20 @@
 <main class="form-signin w-100 m-auto">
-  <ng-container *ngIf="utente; else nuovoUtente">
+  <ng-container *ngIf="utente.id; else nuovoUtente">
     <form [formGroup]="form">
       <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">{{title}}</h1>
       <app-my-button [myConfig]="ripristinaButtonConfig" (click)="onClick(ripristinaButtonConfig.text)"></app-my-button>
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingInput" placeholder="Username" formControlName="username"
+        <input type="text" class="form-control" id="floatingInput" placeholder="Username" formControlName="username" [(ngModel)]="utente.username"
                required>
         <label for="floatingInput">Username</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" [(ngModel)]="utente.password"
                formControlName="password">
         <label for="floatingPassword">Password</label>
       </div>
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingEmail" placeholder="Email"
+        <input type="text" class="form-control" id="floatingEmail" placeholder="Email" [(ngModel)]="utente.email"
                formControlName="email">
         <label for="floatingEmail">Email</label>
       </div>
@@ -33,32 +33,32 @@
       <h1 class="h3 mb-3 fw-normal d-flex justify-content-xl-center">{{title}}</h1>
       <app-my-button [myConfig]="ripristinaButtonConfig" (click)="onClick(ripristinaButtonConfig.text)"></app-my-button>
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingInputNew" placeholder="Username" formControlName="username"
+        <input type="text" class="form-control" id="floatingInputNew" placeholder="Username" formControlName="username" [(ngModel)]="utente.username"
                required>
         <label for="floatingInputNew">Username</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPasswordNew" placeholder="Password"
+        <input type="password" class="form-control" id="floatingPasswordNew" placeholder="Password" [(ngModel)]="utente.password"
                formControlName="password">
         <label for="floatingPasswordNew">Password</label>
       </div>
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingEmailNew" placeholder="Email"
+        <input type="text" class="form-control" id="floatingEmailNew" placeholder="Email" [(ngModel)]="utente.email"
                formControlName="email">
         <label for="floatingEmailNew">Email</label>
       </div>
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingNomeNew" placeholder="Nome"
+        <input type="text" class="form-control" id="floatingNomeNew" placeholder="Nome" [(ngModel)]="utente.nome"
                formControlName="nome">
         <label for="floatingNomeNew">Nome</label>
       </div>
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingCognomeNew" placeholder="Cognome"
+        <input type="text" class="form-control" id="floatingCognomeNew" placeholder="Cognome" [(ngModel)]="utente.cognome"
                formControlName="cognome">
         <label for="floatingCognomeNew">Cognome</label>
       </div>
       <div class="form-floating">
-        <input type="date" class="form-control" id="floatingDataNascitaNew"
+        <input type="date" class="form-control" id="floatingDataNascitaNew" [(ngModel)]="utente.dataNascita"
                formControlName="dataNascita">
         <label for="floatingDataNascitaNew">Data di nascita</label>
       </div>
@@ -72,3 +72,4 @@
     </form>
   </ng-template>
 </main>
+
